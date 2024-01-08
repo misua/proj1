@@ -105,6 +105,7 @@ storage_account = storage.Account('mystorageccount',
 # Create a Disk
 disk = Disk('myDisk',
     resource_group_name=resource_group.name,
+    location=resource_group.location,
     creation_data={
         'create_option': 'Empty'
     },
