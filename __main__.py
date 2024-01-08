@@ -32,9 +32,12 @@ sp = ServicePrincipal('aksSp', application_id=app.application_id)
 sp_password = ServicePrincipalPassword('aksSpPassword', service_principal_id=sp.id, value='password', end_date='2099-01-01T00:00:00Z')
 
 
-cluster = containerservice.KubernetesCluster('myAKSCluster',
+# Create an AKS cluster.
+cluster = containerservice.KubernetesCluster('MyAKSCluster',
     resource_group_name=resource_group.name,
-    default_node_pool={
+    location=resource_group.location,
+    dns_prefix="MyCluster",
+       default_node_pool={
         'name': 'default',
         'node_count': 1,
         'vm_size': 'Standard_B2s',
@@ -42,16 +45,11 @@ cluster = containerservice.KubernetesCluster('myAKSCluster',
         'min_count': 1,
         'max_count': 3,
     },
-    dns_prefix='myaks',
-    linux_profile={
-        'adminUsername': 'adminuser',
-        'sshKey': {
-            'keyData': 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDmjIDHPOHhTnYYccEaBgNZJs9P1PJ8kguQsIIHtqniTj51NZ5zwDI7OL0U3Uj1PZRau7Q4F+9hME7KC6BHaGRZ1bFUpvkqO29yAZvpL/SdP1UtKPxc5vIfItRGYUgeMoeYJLOg7zdU+naKuIqYmKoybf7BSlLxRLTv+2uzpzeb+2u2oDqvMeaf1MagfQYQ5pZJrzMzytsjZlQomEk4tcLW6vvnETjFlP7I8FtW4fq5mwIIKCoOFI0IzwCLjjayzErsC6yODfsojxu6Vxpb1ZvG1sNe6WNcbfK0hf/xSiCqB1Yvna+g9Vjy8R88R9kTfS3uBjdBD2XZN1v3GegKm/Pwuey4O16WnI9tSAVIcjeTpZj4ooiws1aOCmAMhi9aWyDedlLs/a7b2GkKquK29A8xxNx1CJq9qg2tcWdROmUt5OzMmzv85ueI9X6tjQ0ijv4xX3eqh6GLRwXXPJS2OwJKbhBvm/OZHm0CQ8YlPdtvR0VTLpRl5lOVo65icsZ1zj+kkt9EzCLMjUM+DXUp2BrFptYygrzQjPhcAR0ef7qDoG6gp5cm8xZjM+T2D0oouQxvGhLpWp9yRgHqwc5t8FwMWVKmzGG8KHcaoOglirq8rIXnrSROcbs2JnTSqXVSnxIEXPzQ0VxFY40ozDzgnS70F4p9cU3hNSYRK5obie0OhQ== char.lice@outlook.com'
-        },
+    identity={
+        'type': 'SystemAssigned'
     },
-    service_principal={
-        'clientId': app.application_id,
-        'clientSecret': sp_password.value,
+    network_profile={
+        'networkPlugin': 'azure',
     },
 )
 
