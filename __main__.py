@@ -9,6 +9,14 @@ from pulumi_kubernetes.apps.v1 import Deployment
 from pulumi_kubernetes.core.v1 import PersistentVolume, PersistentVolumeClaim,Service
 from pulumi_kubernetes import networking
 from pulumi_azure_native.compute import Disk
+# from pulumi_azure_native import network
+
+# from pulumi_azure_native.network import NetworkSecurityGroup, SecurityRule, NetworkInterface, IPAllocationMethod
+
+#from pulumi_azure_native.network import Peering
+
+
+
 
 
 # Create an Azure Resource Group
@@ -320,11 +328,16 @@ ingress = networking.v1.Ingress('wordpress-ingress',
     },
     opts=pulumi.ResourceOptions(provider=k8s_provider, depends_on=[wordpress_service])
 )
-# Output the public IP
-#pulumi.export('public_ip', wordpress_service.status['loadBalancer']['ingress'][0]['ip'])
-# Assuming wordpress_service is your Service object
-load_balancer = wordpress_service.status.apply(lambda status: status.load_balancer)
-public_ip = load_balancer.apply(lambda lb: lb.ingress[0].ip if lb.ingress else None)
-pulumi.export('public_ip', public_ip)
+
+
+
+
+
+
+# load_balancer = wordpress_service.status.apply(lambda status: status.load_balancer)
+# public_ip = load_balancer.apply(lambda lb: lb.ingress[0].ip if lb.ingress else None)
+# pulumi.export('public_ip', public_ip)
+
+
 
 
